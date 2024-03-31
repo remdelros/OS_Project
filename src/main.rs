@@ -1,21 +1,22 @@
-use algorithms::fcfs::{FCFSScheduler, Process};
-use std::io;
+use std::process::Command;  // For running Linux commands
+mod algorithms;
+mod process;
+mod metrics;
+mod algorithms;
+mod process;
+mod metrics;
 
 fn main() {
-    let mut scheduler = fcfs::FCFSScheduler::new();
-    let mut num_processes: i32 = 0;
+    let mut processes = process::generate_processes(20); // Generate some sample processes
 
-    println!("Enter the number of processes: ");
-    // ... (Input handling code - same as before) ...
+    // Example: Running FCFS scheduling
+    let results = algorithms::fcfs(&mut processes);
 
-    // Add processes to the scheduler
-    for i in 0..num_processes {
-        // ... (Read input data) ...
+    // Collect metrics
+    let turnaround_time = metrics::calculate_turnaround_time(&results);
+    let waiting_time = metrics::calculate_waiting_time(&results);
 
-        let process = fcfs::Process { pid, arrival_time, burst_time };
-        scheduler.add_process(process);
-    }
-
-    // Run the simulation
-    scheduler.run();
+    println!("FCFS Results:");
+    println!("Average Turnaround Time: {}", turnaround_time);
+    println!("Average Waiting Time: {}", waiting_time);
 }
