@@ -1,11 +1,15 @@
 use rand::Rng;
 
 #[derive(Debug, Clone)]
-pub struct Process {
-    pub pid: i32,
-    pub arrival_time: i32,
-    pub burst_time: i32,
-    pub priority: Option<i32>, //  If applicable
+struct Process {
+    pid: usize,
+    arrival_time: usize,
+    burst_time: usize,
+    priority: Option<usize>,
+    remaining_time: usize,
+    completion_time: Option<usize>,
+    waiting_time: Option<usize>,
+    turnaround_time: Option<usize>,
 }
 
 impl Process {
