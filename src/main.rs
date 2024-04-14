@@ -4,6 +4,7 @@ mod process;
 mod algorithms;
 mod gantt;
 mod gantt;
+mod priority;
 
 fn main() {
     // ... (Existing code from previous example)

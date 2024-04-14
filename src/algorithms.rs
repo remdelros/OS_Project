@@ -1,6 +1,13 @@
 use crate::process::Process;
 use std::collections::BinaryHeap;
 
+mod fcfs;
+mod priority_non_preemptive;
+mod priority_preemptive;
+mod rr;
+mod sjf;
+mod srtf;
+
 pub fn fcfs(processes: &mut Vec<Process>) -> Vec<Process> {
     let mut current_time = 0;
     let mut finished_processes = Vec::new();
