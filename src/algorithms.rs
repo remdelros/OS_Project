@@ -8,13 +8,13 @@ mod rr;
 mod sjf;
 mod srtf;
 
-pub fn fcfs(processes: &mut Vec<Process>) -> Vec<Process> {
+pub fn fcfs(processes: &mut Vec<Process>) -> Vec<& mut Process> {
     let mut current_time = 0;
     let mut finished_processes = Vec::new();
 
     for mut process in processes {
         current_time += process.burst_time;
-        process.completion_time = current_time;
+        process.completion_time = Option::from(current_time);
         finished_processes.push(process);
     }
 
@@ -31,7 +31,7 @@ pub fn sjf(processes: &mut Vec<Process>) -> Vec<Process> {
 
         let mut next_process = remaining_processes.remove(0);
         current_time += next_process.burst_time;
-        next_process.completion_time = current_time;
+        next_process.completion_time = Option::from(current_time);
         finished_processes.push(next_process);
     }
 
@@ -49,7 +49,7 @@ pub fn priority(processes: &mut Vec<Process>) -> Vec<Process> {
 
     while let Some(Reverse(mut next_process)) = priority_queue.pop() {
         current_time += next_process.burst_time;
-        next_process.completion_time = current_time;
+        next_process.completion_time = Option::from(current_time);
         finished_processes.push(next_process);
     }
 
@@ -63,9 +63,9 @@ pub fn round_robin(processes: &mut Vec<Process>, time_quantum: i32) -> Vec<Proce
 
     while !remaining_processes.is_empty() {
         if let Some(mut next_process) = remaining_processes.pop() {
-            if next_process.burst_time <= time_quantum {
+            if next_process.burst_time <= time_quantum as usize {
                 current_time += next_process.burst_time;
-                next_process.completion_time = current_time;
+                next_process.completion_time = Option::from(current_time);
                 finished_processes.push(next_process);
             } else {
                 next_process.burst_time -= time_quantum;

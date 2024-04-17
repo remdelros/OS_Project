@@ -1,13 +1,11 @@
 use std::io::{stdin, stdout, Write};
+use crate::process::Process;
 
 mod process;
 mod algorithms;
 mod gantt;
-mod gantt;
-mod priority;
 
 fn main() {
-    // ... (Existing code from previous example)
 
     loop {
         println!("Select an algorithm:");
@@ -18,7 +16,31 @@ fn main() {
         println!("5. Priority (Preemptive)");
         println!("6. Round Robin");
 
-        // ... (Input collection as before)
+        let mut choice = String::new();
+        stdin().read_line(&mut choice).unwrap();
+        let choice = choice.trim().parse::<usize>().unwrap();
+
+
+        let mut num_processes: usize = 0;
+        println!("Enter the number of processes: ");
+        stdin().read_line(&mut num_processes).unwrap();
+        let num_processes = num_processes.trim().parse::<usize>().unwrap();
+
+
+        let mut processes = Vec::with_capacity(num_processes); // Pre-allocate space
+        for i in 0..num_processes {
+            println!("Enter arrival time and burst time for process {}:", i + 1);
+
+            let mut input = String::new();
+            stdin().read_line(&mut input).unwrap();
+            let mut values = input.trim().split_whitespace()
+                .map(|s| s.parse::<usize>().unwrap());
+
+            let arrival_time = values.next().unwrap();
+            let burst_time = values.next().unwrap();
+
+            processes.push(Process::new(i + 1, arrival_time, burst_time));
+        }
 
         let result = match choice {
             1 => algorithms::fcfs(&mut processes),
@@ -48,3 +70,5 @@ fn main() {
         }
     }
 }
+
+
