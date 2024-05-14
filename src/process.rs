@@ -1,30 +1,38 @@
-use rand::Rng;
+use core::cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd};
+use core::option::Option;
+use core::option::Option::Some;
 
-#[derive(Debug, Clone)]
-pub(crate) struct Process {
-    pub(crate) pid: usize,
-    pub(crate) arrival_time: usize,
-    pub(crate) burst_time: usize,
-    priority: Option<usize>,
-    remaining_time: usize,
-    pub(crate) completion_time: Option<usize>,
-    waiting_time: Option<usize>,
-    turnaround_time: Option<usize>,
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Process {
+    pub id: String,
+    pub arrival_time: usize,
+    pub burst_time: usize,
+    pub priority: usize,
+    pub remaining_time: usize,
 }
 
-impl Process {
-    pub fn new() -> Self {
-        let mut rng = rand::thread_rng();
-        Process {
-            pid: rng.gen(),
-            arrival_time: rng.gen_range(0..10),
-            burst_time: rng.gen_range(5..20),
-            priority: None, // Adjust for priority scheduling
-            remaining_time: 0,
-            completion_time: None,
-            waiting_time: None,
-            turnaround_time: None,
-            time_quantum: None
-        }
+pub struct MyProcess(Process);
+
+
+impl Eq for MyProcess {}
+
+impl PartialEq<Self> for MyProcess {
+    fn eq(&self, other: &Self) -> bool {
+        todo!()
     }
 }
+
+impl Ord for MyProcess {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.0.priority.cmp(&self.0.priority)
+    }
+}
+
+
+impl PartialOrd for MyProcess {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+
