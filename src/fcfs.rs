@@ -1,22 +1,12 @@
 use core::{fmt, write};
+use crate::process::Process;
+use crate::GanttEntry;
 
-#[derive(Debug)]
-pub struct GanttEntry {
-    process_id: String,
-    start_time: usize,
-    end_time: usize,
-}
+
 impl fmt::Display for crate::fcfs::GanttEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
     }
-}
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Process {
-    id: String,
-    arrival_time: usize,
-    burst_time: usize,
-    remaining_time: usize,
 }
 
 pub mod fcfs {

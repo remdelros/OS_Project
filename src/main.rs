@@ -1,8 +1,7 @@
 extern crate alloc;
 
-use alloc::string::String;
-use alloc::vec::Vec;
-use core::iter::Iterator;
+use alloc::rc::Rc;
+use core::cell::RefCell;
 use std::io;
 use std::fmt;
 use std::collections::{BinaryHeap, VecDeque};
@@ -18,21 +17,19 @@ mod process;
 
 use process::{Process, MyProcess};
 
-
-// Common GanttEntry struct (used by all modulpub es)
+// Common GanttEntry struct (used by all modules)
 #[derive(Debug)]
 struct GanttEntry {
+    process_id: String,
     start_time: usize,
     end_time: usize,
-    process_id: ()
 }
 
-impl fmt::Display for GanttEntry {
+/*impl fmt::Display for GanttEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write! f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time
+        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
     }
-}
-
+}*/
 
 fn main() {
     println!("Choose a CPU scheduling algorithm:");
@@ -91,7 +88,7 @@ fn main() {
         3 => srtf::srtf::scheduling(&processes),
         4 => rr::rr::scheduling(&processes, time_quantum),
         5 => {
-            let mut wrapped_processes: Vec<MyProcess> = processes.iter().map(|p| MyProcess(*p)).collect();
+            let mut wrapped_processes: Vec<MyProcess> = processes.iter().map(|p| MyProcess(Rc::new(RefCell::new(p.clone())))).collect();
             let gantt_chart = priority::priority::scheduling(&wrapped_processes);
             gantt_chart.into_iter().map(|entry| GanttEntry {
                 process_id: entry.process_id,

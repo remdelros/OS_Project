@@ -1,29 +1,8 @@
 use core::{fmt, write};
 use std::collections::BinaryHeap;
 use std::cmp::{Ordering, Reverse};
-
-
-
-#[derive(Debug)]
-pub(crate) struct GanttEntry {
-    pub(crate) process_id: String,
-    pub(crate) start_time: usize,
-    pub(crate) end_time: usize,
-}
-
-impl fmt::Display for crate::rr::GanttEntry {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-struct Process {
-    id: String,
-    arrival_time: usize,
-    burst_time: usize,
-    remaining_time: usize, // Added remaining_time
-}
+use crate::process::Process;
+use crate::GanttEntry;
 
 pub mod rr {
     use std::collections::VecDeque;
@@ -63,7 +42,8 @@ pub mod rr {
 
             // Check for new arrivals during the quantum
             while !queue.is_empty() && queue[0].arrival_time <= current_time {
-                queue.push_back(queue.pop_front().unwrap());
+                let temp_process = queue.pop_front().unwrap(); // Fix: Temporary variable
+                queue.push_back(temp_process);
             }
 
             if process.remaining_time > 0 {

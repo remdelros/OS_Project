@@ -1,27 +1,16 @@
 use core::{fmt, write};
 use std::collections::BinaryHeap;
 use std::cmp::{Ordering};
-use alloc::vec::Vec;
 use core::clone::Clone;
 use core::cmp::{Ord, PartialOrd, Reverse};
 use core::option::Option;
 use newtype_derive;
-use crate::Process;
+use crate::process::Process;
+use crate::GanttEntry;
 
 // Newtype wrapper around Reverse<Process>
 struct ReversedProcess(Reverse<Process>);
 
-#[derive(Debug)]
-pub struct GanttEntry {
-    process_id: String,
-    start_time: usize,
-    end_time: usize,
-}
-impl fmt::Display for GanttEntry {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
-    }
-}
 
 pub mod srtf {
     use super::*;
