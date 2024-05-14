@@ -5,7 +5,8 @@ use crate::process::Process;
 use crate::GanttEntry;
 
 pub mod rr {
-    use std::collections::VecDeque;
+    use alloc::collections::VecDeque;
+    use alloc::vec::Vec;
     use super::*;
 
     pub fn scheduling(processes: &[Process], time_quantum: usize) -> Vec<GanttEntry> {

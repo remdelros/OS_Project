@@ -10,6 +10,7 @@ impl fmt::Display for crate::fcfs::GanttEntry {
 }
 
 pub mod fcfs {
+    use alloc::vec::Vec;
     use super::*;
 
     pub fn scheduling(processes: &[Process]) -> Vec<GanttEntry> {

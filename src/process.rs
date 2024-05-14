@@ -1,3 +1,4 @@
+use core::cmp::PartialEq;
 use std::cmp::Ordering;
 use std::rc::Rc;
 use std::cell::RefCell;
@@ -29,7 +30,15 @@ impl PartialOrd for Process {
 
 // Newtype wrapper for Process to implement Ord
 #[derive(Clone, Debug)]
-pub struct MyProcess(Rc<RefCell<Process>>);
+#[derive(Eq)]
+pub struct MyProcess(pub(crate) Rc<RefCell<Process>>);
+
+impl PartialEq for MyProcess {
+    fn eq(&self, other: &Self) -> bool {
+        // Logic to determine if the wrapped Process instances are equal
+        self.0.borrow().id == other.0.borrow().id  // Compare by process ID, for example
+    }
+}
 
 impl Ord for MyProcess {
     fn cmp(&self, other: &Self) -> Ordering {
