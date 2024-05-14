@@ -29,7 +29,7 @@ struct GanttEntry {
 
 impl fmt::Display for GanttEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
+        write! f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time
     }
 }
 

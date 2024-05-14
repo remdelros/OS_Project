@@ -1,8 +1,9 @@
+use crate::Process;
 use core::{fmt, write};
 use core::cmp::Ord;
 use std::collections::BinaryHeap;
 use std::cmp::{Ordering, Reverse};
-use crate::Process;
+
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 
@@ -15,22 +16,6 @@ pub struct GanttEntry {
 impl fmt::Display for crate::priority::GanttEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
-    }
-}
-
-
-impl Ord for Process {
-    fn cmp(&self, other: &Self) -> Ordering {
-        // Compare priorities (lower value is higher priority)
-        self.priority.cmp(&other.priority)
-            // If priorities are equal, compare arrival times
-            .then_with(|| self.arrival_time.cmp(&other.arrival_time))
-    }
-}
-
-impl PartialOrd for Process {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
     }
 }
 

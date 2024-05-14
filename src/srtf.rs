@@ -6,32 +6,10 @@ use core::clone::Clone;
 use core::cmp::{Ord, PartialOrd, Reverse};
 use core::option::Option;
 use newtype_derive;
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Process {
-    id: String,
-    arrival_time: usize,
-    burst_time: usize,
-    remaining_time: usize, // Added remaining_time
-}
+use crate::Process;
 
 // Newtype wrapper around Reverse<Process>
 struct ReversedProcess(Reverse<Process>);
-
-impl Ord for Reverse<Process> {
-    fn cmp(&self, other: &Self) -> Ordering {
-        // Compare remaining_time (shortest remaining time first)
-        self.0.remaining_time.cmp(&other.0.remaining_time)
-            // If remaining times are equal, compare arrival times
-            .then_with(|| self.0.arrival_time.cmp(&other.0.arrival_time))
-    }
-}
-
-impl PartialOrd for Reverse<Process> {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
 
 #[derive(Debug)]
 pub struct GanttEntry {
