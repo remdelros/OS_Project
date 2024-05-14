@@ -1,6 +1,8 @@
 extern crate alloc;
 
 use alloc::string::String;
+use alloc::vec::Vec;
+use core::iter::Iterator;
 use std::io;
 use std::fmt;
 use std::collections::{BinaryHeap, VecDeque};
@@ -20,7 +22,6 @@ use process::{Process, MyProcess};
 // Common GanttEntry struct (used by all modulpub es)
 #[derive(Debug)]
 struct GanttEntry {
-    propub:  cess_id,
     start_time: usize,
     end_time: usize,
     process_id: ()

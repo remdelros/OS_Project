@@ -1,19 +1,11 @@
 use core::{fmt, write};
 use std::collections::BinaryHeap;
-use std::cmp::{Ordering, Reverse};
-
-#[derive(Debug)]
-pub(crate) struct GanttEntry {
-    pub(crate) process_id: String,
-    pub(crate) start_time: usize,
-    pub(crate) end_time: usize,
-}
-
-impl fmt::Display for crate::srtf::GanttEntry {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
-    }
-}
+use std::cmp::{Ordering};
+use alloc::vec::Vec;
+use core::clone::Clone;
+use core::cmp::{Ord, PartialOrd, Reverse};
+use core::option::Option;
+use newtype_derive;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
@@ -23,13 +15,37 @@ pub struct Process {
     remaining_time: usize, // Added remaining_time
 }
 
+// Newtype wrapper around Reverse<Process>
+struct ReversedProcess(Reverse<Process>);
+
+impl Ord for Reverse<Process> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // Compare remaining_time (shortest remaining time first)
+        self.0.remaining_time.cmp(&other.0.remaining_time)
+            // If remaining times are equal, compare arrival times
+            .then_with(|| self.0.arrival_time.cmp(&other.0.arrival_time))
+    }
+}
+
+impl PartialOrd for Reverse<Process> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+#[derive(Debug)]
+pub struct GanttEntry {
+    process_id: String,
+    start_time: usize,
+    end_time: usize,
+}
+impl fmt::Display for GanttEntry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
+    }
+}
 
 pub mod srtf {
-    use alloc::collections::BinaryHeap;
-    use alloc::vec::Vec;
-    use core::clone::Clone;
-    use core::cmp::Reverse;
-    use core::option::Option;
     use super::*;
 
     pub fn scheduling(processes: &[Process]) -> Vec<GanttEntry> {
