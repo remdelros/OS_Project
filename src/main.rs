@@ -25,12 +25,6 @@ struct GanttEntry {
     end_time: usize,
 }
 
-/*impl fmt::Display for GanttEntry {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} [{}-{}]", self.process_id, self.start_time, self.end_time)
-    }
-}*/
-
 fn main() {
     println!("Choose a CPU scheduling algorithm:");
     println!("1. FCFS (First Come First Served)");
@@ -128,18 +122,26 @@ fn main() {
 fn print_gantt_chart(gantt_chart: &[GanttEntry]) {
     let max_time = gantt_chart.iter().map(|e| e.end_time).max().unwrap();
 
+    // Print the time axis
+    print!("Time |");
+    for t in 0..=max_time {
+        print!("{:3} ", t);
+    }
+    println!();
+
+    // Print each process's timeline
     for entry in gantt_chart {
+        let pid = &entry.process_id;
         let start = entry.start_time;
         let end = entry.end_time;
-        let pid = &entry.process_id;
 
         print!("{:4} |", pid);
-
-        for _ in 0..start {
-            print!("  ");
-        }
-        for _ in start..end {
-            print!("██");
+        for t in 0..=max_time {
+            if t >= start && t < end {
+                print!("██ ");
+            } else {
+                print!("   ");
+            }
         }
         println!();
     }

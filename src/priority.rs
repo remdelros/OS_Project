@@ -9,12 +9,12 @@ pub mod priority {
     use core::option::Option::Some;
     use super::*;
 
-    pub fn scheduling(processes: &[MyProcess]) -> Vec<GanttEntry> { // change input type to MyProcess
+    pub fn scheduling(processes: &[MyProcess]) -> Vec<GanttEntry> {
         let mut processes = processes.to_vec();
-        processes.sort_by_key(|p| p.0.borrow().arrival_time); // Sort based on wrapped Process's arrival time
+        processes.sort_by_key(|p| p.0.borrow().arrival_time);
 
         let mut gantt_chart = Vec::new();
-        let mut ready_queue: BinaryHeap<MyProcess> = BinaryHeap::new(); // Min-heap based on priority
+        let mut ready_queue: BinaryHeap<MyProcess> = BinaryHeap::new();
         let mut current_time = 0;
         let mut current_process: Option<Process> = None;
 

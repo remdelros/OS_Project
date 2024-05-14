@@ -26,12 +26,12 @@ pub mod sjf {
     pub fn scheduling(processes: &[Process]) -> Vec<GanttEntry> {
         let mut processes = processes.to_vec();
         for process in &mut processes {
-            process.remaining_time = process.burst_time; // Initialize remaining time
+            process.remaining_time = process.burst_time;
         }
         processes.sort_by_key(|p| p.arrival_time);
 
         let mut gantt_chart = Vec::new();
-        let mut ready_queue: BinaryHeap<Process> = BinaryHeap::new(); // Min-heap based on burst time
+        let mut ready_queue: BinaryHeap<Process> = BinaryHeap::new();
         let mut current_time = 0;
         let mut i = 0;
 

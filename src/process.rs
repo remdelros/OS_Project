@@ -13,20 +13,6 @@ pub struct Process {
     pub remaining_time: usize,
 }
 
-// Implement Ord for Process
-/*impl Ord for Process {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.remaining_time.cmp(&other.remaining_time)
-            .then_with(|| self.priority.cmp(&other.priority))
-            .then_with(|| self.arrival_time.cmp(&other.arrival_time))
-    }
-}
-
-impl PartialOrd for Process {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}*/
 
 // Newtype wrapper for Process to implement Ord
 #[derive(Clone, Debug)]

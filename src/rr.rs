@@ -43,7 +43,7 @@ pub mod rr {
 
             // Check for new arrivals during the quantum
             while !queue.is_empty() && queue[0].arrival_time <= current_time {
-                let temp_process = queue.pop_front().unwrap(); // Fix: Temporary variable
+                let temp_process = queue.pop_front().unwrap();
                 queue.push_back(temp_process);
             }
 
