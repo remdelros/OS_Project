@@ -99,8 +99,29 @@ fn main() {
         _ => panic!("Invalid choice."),
     };
 
+    // Calculate waiting, completion, and turnaround times
+    let mut completion_times = vec![0; processes.len()];
+    let mut waiting_times = vec![0; processes.len()];
+    let mut turnaround_times = vec![0; processes.len()];
+
+    for entry in &gantt_chart {
+        let process_index = entry.process_id[1..].parse::<usize>().unwrap() - 1;
+        completion_times[process_index] = entry.end_time;
+    }
+
+    for (i, process) in processes.iter().enumerate() {
+        waiting_times[i] = completion_times[i] - process.burst_time - process.arrival_time;
+        turnaround_times[i] = completion_times[i] - process.arrival_time;
+    }
+
     println!("\nGantt Chart:");
     for entry in gantt_chart {
         println!("{}", entry);
+    }
+
+    println!("\nProcess | Waiting Time | Completion Time | Turnaround Time");
+    for (i, process) in processes.iter().enumerate() {
+        println!("P{}      | {}            | {}              | {}",
+                 i + 1, waiting_times[i], completion_times[i], turnaround_times[i]);
     }
 }
