@@ -115,13 +115,32 @@ fn main() {
     }
 
     println!("\nGantt Chart:");
-    for entry in gantt_chart {
-        println!("{}", entry);
-    }
+    print_gantt_chart(&gantt_chart);
 
     println!("\nProcess | Waiting Time | Completion Time | Turnaround Time");
     for (i, process) in processes.iter().enumerate() {
         println!("P{}      | {}            | {}              | {}",
                  i + 1, waiting_times[i], completion_times[i], turnaround_times[i]);
+    }
+}
+
+// Function to print a visually appealing Gantt Chart
+fn print_gantt_chart(gantt_chart: &[GanttEntry]) {
+    let max_time = gantt_chart.iter().map(|e| e.end_time).max().unwrap();
+
+    for entry in gantt_chart {
+        let start = entry.start_time;
+        let end = entry.end_time;
+        let pid = &entry.process_id;
+
+        print!("{:4} |", pid);
+
+        for _ in 0..start {
+            print!("  ");
+        }
+        for _ in start..end {
+            print!("██");
+        }
+        println!();
     }
 }
